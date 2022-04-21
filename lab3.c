@@ -159,20 +159,35 @@ int main()
             case LOAD_FROM_FILE:
             {
                 FILE* file;
+                int fileSize=0;
                 char* fileName = "C:\\Users\\dahhw\\CLionProjects"
                                  "\\untitled\\formula.txt";
                 char symbol;
 
                 file = fopen(fileName, "r");
-                do {
-                    symbol = fgetc(file);
-                    printf("%c", symbol);
 
-                } while (symbol != EOF);
-                printf("\nloaded!");
+                if (file)
+                {
+                    fseek (file, 0, SEEK_END);
+                    fileSize = ftell(file);
+                    if (fileSize == 0)
+                    {
+                        printf("File is empty");
+                        break;
+                    }
+                    else
+                    {
+                        do {
+                            symbol = fgetc(file);
+                            printf("%c", symbol);
 
-                fclose(file);
-                break;
+                        } while (symbol != EOF);
+                        printf("\nloaded!");
+
+                        fclose(file);
+                        break;
+                    }
+                }
             }
 
             case UPLOAD_TO_FILE:
@@ -184,7 +199,7 @@ int main()
                 file = fopen(fileName, "w");
                 if (LoadToFile != NULL)
                 {
-                    printf("Loading: %s to file\n", LoadToFile);
+                    printf("Loading: %s to file...\n", LoadToFile);
                     fputs(LoadToFile, file);
 
                     printf("Formula uploaded!\n");
