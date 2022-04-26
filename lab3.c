@@ -5,13 +5,13 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define FALSE 0
+#define TRUE 1
 #define REVERSE_POLISH 1
+#define ALLOWED_CHECKS 2
 #define LOAD_FROM_FILE 2
 #define UPLOAD_TO_FILE 3
-#define ALLOWED_CHECKS 2
 #define EXIT 4
-#define TRUE 1
-#define FALSE 0
 
 char stack[100];
 int top = -1;
@@ -28,6 +28,8 @@ int InputCheck(int lowerLimit)
         {
             while ((inputChar = getchar()) != '\n');
         }
+        if  (isalpha(successInput))
+            break;
         printf("Invalid input entered!, enter new input:");
         successInput = scanf("%d%c", &number, &inputChar);
     }
@@ -68,12 +70,73 @@ int priority(char x)
     return 0;
 }
 
+void loadToFile(char *formula, char *reversePolish)
+{
+    FILE *file = NULL;
+    char* fileName = "C:\\Users\\dahhw\\CLionProjects"
+                     "\\untitled\\formula.txt";
+
+    file = fopen(fileName, "w");
+    printf("Loading: %s to file...\n", reversePolish);
+    fputs(reversePolish, file);
+
+    printf("Formula uploaded!\n");
+
+    free(formula);
+    fclose(file);
+    file = NULL;
+}
+
+int GetFileSize()
+{
+    FILE* file;
+    int fileSize;
+    char* fileName = "C:\\Users\\dahhw\\CLionProjects"
+                     "\\untitled\\formula.txt";
+
+    file = fopen(fileName, "r");
+
+    fseek (file, 0, SEEK_END);
+    fileSize = ftell(file);
+    fclose(file);
+    return fileSize;
+}
+
+
+void loadFromFile()
+{
+    char* fileName = "C:\\Users\\dahhw\\CLionProjects"
+                     "\\untitled\\formula.txt";
+
+    char *text = NULL;
+    long int size;
+    FILE *file = fopen(fileName, "r");
+
+    printf("Loading formula from file...\n");
+    if (file != NULL)
+    {
+        fseek(file, 0, SEEK_END);
+        size = ftell(file);
+        fseek(file, 0, SEEK_SET);
+
+        text = calloc(size + 1, sizeof(char));
+        fread(text, 1, size, file);
+        text[size] = '\0';
+    }
+    else
+        printf("\0");
+
+    printf("Formula loaded: %s\n", text);
+    free(text);
+    fclose(file);
+}
+
 int main()
 {
     char* expression = NULL;
     char* formula = NULL;
     char* final = NULL;
-    char* LoadToFile = NULL;
+    char* reversePolish = NULL;
     char x;
     char elementToAdd[] = "";
     int choice = 0;
@@ -87,7 +150,6 @@ int main()
         printf("4. Exit\n\n");
         printf("Enter your choice:");
         choice = InputCheck(0);
-
         formula = calloc(100, sizeof(char));
         final = calloc(100, sizeof(char));
 
@@ -96,7 +158,6 @@ int main()
             case REVERSE_POLISH:
                 printf("\nEnter the expression: ");
                 scanf("%[^\n]%*c", formula);
-
                 if (strpbrk(formula, "_!@#$%^&=\\][‘;.,{}|:”<>?^") ||
                 strchr(formula, ' ') != NULL || strlen(formula) == 0)
                 {
@@ -148,7 +209,7 @@ int main()
                         strncat(final, elementToAdd, 1);
                     }
                     printf("reverse polish notation: %s\n", final);
-                    LoadToFile = final;
+                    reversePolish = final;
                 }
                 else
                 {
@@ -158,55 +219,26 @@ int main()
 
             case LOAD_FROM_FILE:
             {
-                FILE* file;
-                int fileSize=0;
-                char* fileName = "C:\\Users\\dahhw\\CLionProjects"
-                                 "\\untitled\\formula.txt";
-                char symbol;
 
-                file = fopen(fileName, "r");
-
-                if (file)
+                if (GetFileSize() == 0)
                 {
-                    fseek (file, 0, SEEK_END);
-                    fileSize = ftell(file);
-                    if (fileSize == 0)
-                    {
-                        printf("File is empty");
-                        break;
-                    }
-                    else
-                    {
-                        do {
-                            symbol = fgetc(file);
-                            printf("%c", symbol);
-
-                        } while (symbol != EOF);
-                        printf("\nloaded!");
-
-                        fclose(file);
-                        break;
-                    }
+                    printf("File is empty");
+                    break;
+                }
+                else
+                {
+                    loadFromFile();
+                    break;
                 }
             }
 
             case UPLOAD_TO_FILE:
             {
-                FILE *file = NULL;
-                char* fileName = "C:\\Users\\dahhw\\CLionProjects"
-                                 "\\untitled\\formula.txt";
-
-                file = fopen(fileName, "w");
-                if (LoadToFile != NULL)
+                if (reversePolish != NULL)
                 {
-                    printf("Loading: %s to file...\n", LoadToFile);
-                    fputs(LoadToFile, file);
-
-                    printf("Formula uploaded!\n");
-
-                    free(formula);
+                    loadToFile(formula, reversePolish);
+                    reversePolish = NULL;
                     free(final);
-                    fclose(file);
                 }
                 else
                 {
