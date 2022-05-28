@@ -229,39 +229,6 @@ int save(DblLinkedList* list)
         }
     }
     fclose(file);
-
-
-
-//    size_t n = list->size;
-//    accumulator* st = (accumulator *) malloc(n * sizeof(accumulator));
-//
-//    Node* tmp = list->head;
-//    int j = 0;
-//    while (tmp)
-//    {
-//        st[j] = tmp->value;
-//
-//        ++j;
-//        tmp = tmp->next;
-//    }
-//    FILE *fp = fopen("accumulators.txt", "w");
-//    char *c;
-//
-//    int size = n * sizeof(accumulator);
-//
-//    c = (char *) &n;
-//    for (int i = 0; i < sizeof(int); ++i)
-//    {
-//        putc(*c++, fp);
-//    }
-//
-//    c = (char *) st;
-//    for (int i = 0; i < size; ++i) {
-//        putc(*c, fp);
-//        c++;
-//    }
-//    fclose(fp);
-//    free(st);
     return 0;
 }
 
