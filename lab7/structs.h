@@ -13,9 +13,8 @@ enum
     DELETE_WORDS,
     PRINT_WORDS,
     MAKE_MANY_TO_MANY_BOND,
-    SORT_DATA,
-    SAVE_DATA,
-    LOAD_DATA,
+    UPLOAD_TO_FILE,
+    DOWNLOAD_FROM_FILE,
     EXIT
 };
 
@@ -71,5 +70,6 @@ typedef struct _RusDblLinkedList
     RusNode *head;
     RusNode *tail;
 } EDblLinkedList;
+
 
 #endif //LAB7_STRUCTS_H

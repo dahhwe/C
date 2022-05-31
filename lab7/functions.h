@@ -8,105 +8,152 @@
 #define LAB7_FUNCTIONS_H
 
 /**
- * инвертирование списка
- * @param list
+ * \details Добавление русского слова в список
+ * @param wordToAdd русское слово
+ * @param partOfSpeech часть речи
+ * @param wordList список слов
  */
-void reverseList();
-
 void addRusWord(char *wordToAdd, char *partOfSpeech, EDblLinkedList *wordList);
 
+/**
+ * \details Добавление английского слова в список
+ * @param wordToAdd английское слово
+ * @param partOfSpeech часть речи
+ * @param wordList список слов
+ */
 void addEngWord(char* wordToAdd, char* partOfSpeech, ODblLinkedList* wordList);
 
 /**
- * Функция массив DblLinkedList
- * @return
- */
-void deleteDblLinkedList();
-
-
-/**
- * Добавления структуры аккумулятора в двусвязный массив
- * @param gapNumber номер аккумулятора для добавления
- * @param list двусвязный массив
- */
-void addAccumulator(double price, double voltage, double capacity);
-
-/**
- * Уменьшение двусвязного массива после удаления структуры
- * @param list двусвязный массив
- */
-void deleteAcc(size_t gapNumber);
-
-
-
-
-
-/**
- * Проверка ввода на число
+ * \details Проверка ввода на число
  * @return True если входное значение является числом
  */
 int inputIntCheck(char valueArray[]);
 
 /**
- * Дополнительная проверка ввода на число
+ * \details Дополнительная проверка ввода на число
  * @return True если входное значение является числом
  */
 int intInputCheck();
 
 /**
- * Загрузка структур из файла
- * @param str строка для загрузки
- * @param substr подстрока
- * @return
+ * \details Удаление списка
+ * @param list список
  */
-int load();
-
-char* getString();
-
 void deleteOdblLinkedList(ODblLinkedList **list);
 
+/**
+ * \details
+ * Удаление списка
+ * @param list список
+ */
 void deleteEdblLinkedList(EDblLinkedList **list);
 
+/**
+ * Связка объектов
+   \brief
+ * @param eng английское слово
+ * @param rus русское слово
+ * @return
+ */
 bool connectNodes(EngNode *eng, RusNode *rus);
 
+/**
+ * \details Связь списков
+ * \brief
+ * @param pList список
+ * @param index индекс списка
+ * @return
+ */
 EngNode *getEnglishWord(ODblLinkedList *pList, size_t index);
 
+/**
+ * \details вывод русских слов
+ * @param pList список слов
+ */
 void printRusWords(EDblLinkedList *pList);
 
+/**
+ * \details вывод английских слов
+ * @param pList список слов
+ */
 void printEngWords(ODblLinkedList *pList);
 
+/**
+ * \details Вывод всех слов
+ * @param rusWords русские слова
+ * @param engWords английские слова
+ */
 void printAllWords(EDblLinkedList *rusWords, ODblLinkedList *engWords);
 
+/**
+ * \details Создание второго списка
+ * @return
+ */
 EDblLinkedList *createEdblLinkedList();
 
+/**
+ * \details Создание первого списка
+ * @return
+ */
 ODblLinkedList *createOdblLinkedList();
 
+/**
+ * \details динамическое выделение памяти для строки
+ * @param string строка
+ * @return
+ */
 char* getDynamicString(char *string);
 
-
+/**
+ * \details получение всех русских слов
+ * @param list список
+ * @param index индекс слов
+ * @return
+ */
 RusNode* getRussianWord(EDblLinkedList* list, size_t index);
 
 /**
- * Вывод меню для выбора вывода данных
+ * \details Вывод меню для выбора вывода данных
  */
 void wayToPrintMenu();
 
 /**
- *  Вывод основного меню
+ * \details Вывод основного меню
  */
 void printMenu();
 
+/**
+ * \details меню с дальнейшим выбором метода вывода слов
+ * @param rusWords русские слова
+ * @param engWords английские слова
+ */
 void printWords(EDblLinkedList *rusWords, ODblLinkedList *engWords);
 
 /**
- *  Вывод структур
+ * \details Загрузка объектов в файл
+ * @param rusWords русские слова
+ * @param engWords английские слова
  */
-void printStructs();
+void loadToFile(EDblLinkedList* rusWords, ODblLinkedList* engWords);
+
 
 /**
- *
- *  Сохранение структур в файл
+ * Загрузка данных из файла
  */
-int save();
+void downloadFromFile();
+
+/**
+ * \details Печать связанных английских слов с русскими
+ * @param pNode
+ * @param num
+ */
+void printEngToRus(EngNode *pNode, int num);
+
+/**
+ * \details Печать связанных русских слов с английскими
+ * @param pNode
+ * @param num
+ */
+void printRusToEng(RusNode *pNode, int num);
 
 #endif //LAB7_FUNCTIONS_H

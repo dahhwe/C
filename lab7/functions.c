@@ -15,7 +15,6 @@
 
 #define MAX_INPUT_ARRAY_LEN 100
 
-void printEngToRus(EngNode *pNode, int num);
 
 void deleteOdblLinkedList(ODblLinkedList **list)
 {
@@ -44,6 +43,7 @@ void deleteEdblLinkedList(EDblLinkedList** list)
     free(*list);
     (*list) = NULL;
 }
+
 bool connectNodes(EngNode *eng, RusNode *rus)
 {
     for (int i = 0; i < eng->connSize; i++)
@@ -59,7 +59,7 @@ bool connectNodes(EngNode *eng, RusNode *rus)
     return true;
 }
 
-EngNode *getEnglishWord(ODblLinkedList* list, size_t index)
+EngNode* getEnglishWord(ODblLinkedList* list, size_t index)
 {
     EngNode *tmp = list->head;
     size_t i = 0;
@@ -72,7 +72,6 @@ EngNode *getEnglishWord(ODblLinkedList* list, size_t index)
 
     return tmp;
 }
-
 
 RusNode* getRussianWord(EDblLinkedList* list, size_t index)
 {
@@ -142,26 +141,23 @@ void addRusWord(char *wordToAdd, char *partOfSpeech, EDblLinkedList *wordList)
     wordList->size++;
 }
 
-
-
-EDblLinkedList *createEdblLinkedList()
+EDblLinkedList* createEdblLinkedList()
 {
-    EDblLinkedList *tmp = (EDblLinkedList *) malloc(sizeof(EDblLinkedList));
+    EDblLinkedList* tmp = (EDblLinkedList *) malloc(sizeof(EDblLinkedList));
     tmp->size = 0;
     tmp->head = tmp->tail = NULL;
 
     return tmp;
 }
 
-ODblLinkedList *createOdblLinkedList()
+ODblLinkedList* createOdblLinkedList()
 {
-    ODblLinkedList *tmp = (ODblLinkedList *) malloc(sizeof(ODblLinkedList));
+    ODblLinkedList* tmp = (ODblLinkedList *) malloc(sizeof(ODblLinkedList));
     tmp->size = 0;
     tmp->head = tmp->tail = NULL;
 
     return tmp;
 }
-
 
 int inputIntCheck(char valueArray[])
 {
@@ -175,23 +171,22 @@ int inputIntCheck(char valueArray[])
     return true;
 }
 
-char* getDynamicString(char *string)
+char* getDynamicString(char* string)
 {
-    int c; //as getchar() returns `int`
-    string = malloc(sizeof(char)); //allocating memory
+    int c;
+    string = malloc(sizeof(char));
 
     string[0] = '\0';
     for(int i=0; i<100 && (c=getchar())!='\n' && c != EOF ; i++)
     {
-        string = realloc(string, (i+2)*sizeof(char)); //reallocating memory
-        string[i] = (char) c; //type casting `int` to `char`
-        string[i+1] = '\0'; //inserting null character at the end
+        string = realloc(string, (i+2)*sizeof(char));
+        string[i] = (char) c;
+        string[i+1] = '\0';
     }
-
     return string;
 }
 
-void printWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
+void printWords(EDblLinkedList* rusWords, ODblLinkedList* engWords)
 {
     int userChoice;
 
@@ -215,21 +210,32 @@ void printWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
             break;
 
         case PRINT_RUS_BONDED_TO_ENG:
+            puts("Enter the number of Russian word:");
+            int rusWordNum = intInputCheck() - 1;
 
-            break;
+            RusNode* rusPickedWord = (RusNode *) getEnglishWord(engWords,
+                                                                rusWordNum);
 
-        case PRINT_ENG_BONDED_TO_RUS:
-            puts("Enter the number of English word:");
-            int wordNum = intInputCheck() - 1;
-
-            EngNode* pickedWord = getEnglishWord(engWords, wordNum);
-
-            if (pickedWord == NULL)
+            if (rusPickedWord == NULL)
             {
                 puts("No bonds present at that number");
                 break;
             }
-            printEngToRus(pickedWord, wordNum);
+            printRusToEng(rusPickedWord, rusWordNum);
+            break;
+
+        case PRINT_ENG_BONDED_TO_RUS:
+            puts("Enter the number of English word:");
+            int engWordNum = intInputCheck() - 1;
+
+            EngNode* engPickedWord = getEnglishWord(engWords, engWordNum);
+
+            if (engPickedWord == NULL)
+            {
+                puts("No bonds present at that number");
+                break;
+            }
+            printEngToRus(engPickedWord, engWordNum);
             break;
 
         default:
@@ -238,13 +244,32 @@ void printWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
 
 }
 
-void printEngToRus(EngNode *node, int num)
+void printRusToEng(RusNode* node, int num)
+{
+    RusWords russian = node->value;
+    printf("\nword No: %d\n", num + 1);
+    printf("\tWord: %s\n", russian.word);
+    printf("\tPart of speech: %s\n", russian.partOfSpeech);
+    if (!node->connSize)
+    {
+        puts("\nNo connections made to that word!");
+        return;
+    }
+    puts("\tRelated words:");
+    RusNode** pRusNode = (RusNode **) node->connections;
+    for (int i = 0; i < node->connSize; i++)
+    {
+        printf("\t\t%s\n", (pRusNode[i]->value).word);
+    }
+}
+
+void printEngToRus(EngNode* node, int num)
 {
     EngWords english = node->value;
     printf("\nword No: %d\n", num + 1);
     printf("\tWord: %s\n", english.word);
     printf("\tPart of speech: %s\n", english.partOfSpeech);
-    if (node->connSize == 0)
+    if (!node->connSize)
     {
         puts("\nNo connections made to that word!");
         return;
@@ -257,7 +282,7 @@ void printEngToRus(EngNode *node, int num)
     }
 }
 
-void printAllWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
+void printAllWords(EDblLinkedList* rusWords, ODblLinkedList* engWords)
 {
     int i = 0;
     int j = 0;
@@ -270,7 +295,7 @@ void printAllWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
     {
         puts("\nEnglish words:\n");
 
-        EngNode *tmpEng = engWords->head;
+        EngNode* tmpEng = engWords->head;
         while (tmpEng)
         {
             EngWords eng = tmpEng->value;
@@ -290,7 +315,7 @@ void printAllWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
     else
     {
         puts("\nRussian words:\n");
-        RusNode *tmpRus = rusWords->head;
+        RusNode* tmpRus = rusWords->head;
         while (tmpRus)
         {
             RusWords rus = tmpRus->value;
@@ -304,7 +329,7 @@ void printAllWords(EDblLinkedList *rusWords, ODblLinkedList *engWords)
     }
 }
 
-void printEngWords(ODblLinkedList *engWords)
+void printEngWords(ODblLinkedList* engWords)
 {
     int i = 0;
 
@@ -313,7 +338,7 @@ void printEngWords(ODblLinkedList *engWords)
         puts("No English words");
         return;
     }
-    EngNode *tmp = engWords->head;
+    EngNode* tmp = engWords->head;
 
     while (tmp)
     {
@@ -327,7 +352,7 @@ void printEngWords(ODblLinkedList *engWords)
     }
 }
 
-void printRusWords(EDblLinkedList *rusWords)
+void printRusWords(EDblLinkedList* rusWords)
 {
     int i = 0;
 
@@ -336,7 +361,7 @@ void printRusWords(EDblLinkedList *rusWords)
         puts("No Russian words");
         return;
     }
-    RusNode *tmp = rusWords->head;
+    RusNode* tmp = rusWords->head;
 
     while (tmp)
     {
@@ -349,7 +374,6 @@ void printRusWords(EDblLinkedList *rusWords)
         ++i;
     }
 }
-
 
 void wayToPrintMenu()
 {
@@ -373,10 +397,9 @@ void printMenu()
     puts("3. Delete words");
     puts("4. Print words");
     puts("5. Make many-to-many relationship");
-    puts("6. Sort words");
-    puts("7. Save data");
-    puts("8. Load data");
-    puts("9. Exit");
+    puts("6. Upload to file");
+    puts("7. Download from file");
+    puts("8. Exit");
 }
 
 int intInputCheck()
@@ -390,4 +413,67 @@ int intInputCheck()
         return -1;
     }
     return strtol(strArrayLen, NULL, 10);
+}
+
+void loadToFile(EDblLinkedList* rusWords, ODblLinkedList* engWords)
+{
+
+    FILE* file = fopen("dictionary.txt", "w");
+    struct _EngNode* tmpEng = (struct _EngNode *) engWords->head;
+    struct _RusNode* tmpRus = (struct _RusNode *) rusWords->head;
+
+    if (!engWords->size)
+    {
+        puts("No English words");
+    }
+    else
+    {
+        fprintf(file, "English:\n");
+        for (int i = 0; i < engWords->size; i++)
+        {
+            fprintf(file, "word: %s\n Part of speech: %s\n\n",
+                    tmpEng->value.word, tmpEng->value.partOfSpeech);
+        }
+    }
+
+    if (!rusWords->size)
+    {
+        puts("No Russian words");
+    }
+    else
+    {
+        fprintf(file, "Russian:\n");
+        for (int j = 0; j < rusWords->size; j++)
+        {
+            fprintf(file, "word: %s\n Part of speech: %s\n\n",
+                    tmpRus->value.word, tmpRus->value.partOfSpeech);
+        }
+    }
+    fclose(file);
+    if (engWords->size && rusWords->size)
+        puts("uploaded");
+}
+
+void downloadFromFile()
+{
+    FILE * fp;
+    char * line = NULL;
+    size_t len = 0;
+    ssize_t read;
+
+    fp = fopen("dictionary.txt", "r+");
+    if (fp == NULL)
+    {
+        puts("Error while reading from file");
+    }
+    else
+    {
+        while ((read = getline(&line, &len, fp)) != -1)
+        {
+            printf("%s", line);
+        }
+    }
+    fclose(fp);
+    if (line)
+        free(line);
 }

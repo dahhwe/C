@@ -79,6 +79,7 @@ int main()
                 }
 
             case DELETE_WORDS:
+
                 break;
 
             case PRINT_WORDS:
@@ -120,18 +121,19 @@ int main()
                 }
                 break;
 
-            case SORT_DATA:
+            case UPLOAD_TO_FILE:
+                loadToFile(russianWords, englishWords);
                 break;
 
-            case SAVE_DATA:
-                break;
-
-            case LOAD_DATA:
+            case DOWNLOAD_FROM_FILE:
+                downloadFromFile();
                 break;
 
             case EXIT:
-                deleteEdblLinkedList(&wordToAddRus);
-                deleteOdblLinkedList(&wordToAddEng);
+                puts("Goodbye!");
+
+                deleteEdblLinkedList((EDblLinkedList **) &wordToAddRus);
+                deleteOdblLinkedList((ODblLinkedList **) &wordToAddEng);
                 break;
 
             default:
@@ -139,6 +141,5 @@ int main()
         }
 
     } while (userChoice != EXIT);
-    puts("Goodbye!");
     return 0;
 }
