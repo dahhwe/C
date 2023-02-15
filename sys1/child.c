@@ -10,16 +10,14 @@
 #define MIN_YR  1900
 
 
-int IsLeapYear(int year)
-{
+int IsLeapYear(int year) {
     return (((year % 4 == 0) &&
              (year % 100 != 0)) ||
             (year % 400 == 0));
 }
 
 // Возвращает 1 если дата правильная
-int dateCheck(Date *validDate)
-{
+int dateCheck(Date *validDate) {
     //проверка дня, месяца и года
     if (validDate->year > MAX_YR ||
         validDate->year < MIN_YR)
@@ -28,8 +26,7 @@ int dateCheck(Date *validDate)
         return 0;
     if (validDate->day < 1 || validDate->day > 31)
         return 0;
-    if (validDate->month == 2)
-    {
+    if (validDate->month == 2) {
         if (IsLeapYear(validDate->year))
             return (validDate->day <= 29);
         else
@@ -41,23 +38,20 @@ int dateCheck(Date *validDate)
     return 1;
 }
 
-void print_menu()
-{
+void print_menu() {
     printf("\n#1 Ввести дату и время\n");
     printf("#2 Узнать дату и время в другом часовом поясе\n");
     printf("#3 Выход\n");
     printf(">");
 }
 
-int get_variant(int count)
-{
+int get_variant(int count) {
     int variant;
     char string[100];
     scanf("%s", string);
 
     while (sscanf(string, "%d", &variant) != 1 || variant < 1 ||
-           variant > count)
-    {
+           variant > count) {
         printf("Incorrect input. Try again: ");
         scanf("%s", string);
     }
@@ -65,20 +59,17 @@ int get_variant(int count)
     return variant;
 }
 
-bool isInRange(int lowerLimit, int upperLimit, int numToCheck)
-{
+bool isInRange(int lowerLimit, int upperLimit, int numToCheck) {
     return (lowerLimit <= numToCheck && numToCheck <= upperLimit);
 }
 
-int getTimezone()
-{
+int getTimezone() {
     int N;
 
     printf("\nВведите часовую зону N, в котором необходимо узнать"
            "время и дату в формате, где N число от -12 до +14:\n");
     scanf("%d", &N);
-    while (!isInRange(-12, 14, N))
-    {
+    while (!isInRange(-12, 14, N)) {
         printf("Некорректные значения!\n");
         printf("Введите часовую зону N, в котором необходимо"
                " узнать время и дату в формате, "
@@ -88,23 +79,21 @@ int getTimezone()
     return N;
 }
 
-int main(void)
-{
+#ifndef UNIT_TESTS_LAUNCH
+
+int main(void) {
     int minute = 0, hour = 0, N = 0, timezoneTime, dateValid, choice;
     Date getDate = {0};
 
-    do
-    {
+    do {
         print_menu();
         choice = get_variant(EXIT);
-        switch (choice)
-        {
+        switch (choice) {
             case GET_DETAILS:
                 printf("Введите дату в формате ДД.ММ.ГГГГ: ");
                 scanf("%d.%d.%d", &getDate.day, &getDate.month, &getDate.year);
                 dateValid = dateCheck(&getDate);
-                while (!dateValid)
-                {
+                while (!dateValid) {
                     printf("Некорректные значения!\n");
                     printf("Введите дату в формате ДД.ММ.ГГГГ: ");
                     scanf("%d.%d.%d", &getDate.day, &getDate.month,
@@ -117,8 +106,7 @@ int main(void)
                 printf("Введите местное время в формате ЧЧ.ММ: ");
                 scanf("%d.%d", &hour, &minute);
                 while (!(isInRange(0, 60, minute) &&
-                         (isInRange(1, 23, hour))))
-                {
+                         (isInRange(1, 23, hour)))) {
                     printf("Некорректные значения!\n");
                     printf("Введите местное время в формате ЧЧ.ММ: ");
                     scanf("%d.%d", &hour, &minute);
@@ -138,24 +126,18 @@ int main(void)
                 timezoneTime = hour + N;
                 hour = timezoneTime;
 
-                if (timezoneTime > 24)
-                {
+                if (timezoneTime > 24) {
                     hour = timezoneTime - 24;
-                    if (getDate.day == 28 && getDate.month == 2)
-                    {
+                    if (getDate.day == 28 && getDate.month == 2) {
                         getDate.day = 1;
-                    } else
-                    {
+                    } else {
                         getDate.day += 1;
                     }
-                } else if (timezoneTime < 0)
-                {
+                } else if (timezoneTime < 0) {
                     hour = timezoneTime + 24;
-                    if (getDate.day == 1 && getDate.month == 3)
-                    {
+                    if (getDate.day == 1 && getDate.month == 3) {
                         getDate.day = 28;
-                    } else
-                    {
+                    } else {
                         getDate.day -= 1;
                     }
                 }
@@ -166,3 +148,5 @@ int main(void)
     } while (choice != EXIT);
     return 0;
 }
+
+#endif

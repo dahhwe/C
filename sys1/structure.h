@@ -5,15 +5,13 @@
 #ifndef SYSTEM1_STRUCTURE_H
 #define SYSTEM1_STRUCTURE_H
 
-enum
-{
+enum {
     GET_DETAILS = 1,
     CALCULATE_NEW_DATE,
     EXIT
 };
 
-typedef struct
-{
+typedef struct {
     int year;
     int month;
     int day;
