@@ -15,7 +15,7 @@
  * \brief Первый тест
  */
 void FirstTest() {
-    Date getDate = {31, 12, 2007};
+    Date getDate = {2002, 12, 31};
     bool dateValid = dateCheck(&getDate);
     CU_ASSERT_EQUAL(dateValid, true)
 
@@ -25,7 +25,7 @@ void FirstTest() {
  * \brief Второй тест
  */
 void SecondTest() {
-    Date getDate = {31, 2, 2012};
+    Date getDate = {2015, 2, 31};
     bool dateValid = dateCheck(&getDate);
     CU_ASSERT_EQUAL(dateValid, false)
 }

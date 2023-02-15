@@ -59,6 +59,4 @@ int getTimezone();
  * \return Завершение программы
  */
 int main();
-
-
 #endif //SYSTEM1_CHILD_H

@@ -39,6 +39,9 @@ int dateCheck(Date *validDate) {
 }
 
 void print_menu() {
+    printf("\n╭────────────────────────────────────╮\n"
+           "│            Главное Меню            │\n"
+           "╰────────────────────────────────────╯");
     printf("\n#1 Ввести дату и время\n");
     printf("#2 Узнать дату и время в другом часовом поясе\n");
     printf("#3 Выход\n");
@@ -148,5 +151,4 @@ int main(void) {
     } while (choice != EXIT);
     return 0;
 }
-
 #endif
