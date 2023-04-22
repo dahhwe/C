@@ -1,0 +1,4 @@
+# ninja log v5
+10	110	1680754011848126883	build.ninja	e2717a7142b33887
+0	117	1680754011972126887	CMakeFiles/sys5.dir/server.c.o	bad5f9f99ba9fb15
+1	133	1680754011996126888	CMakeFiles/sys5.dir/client.c.o	e8349b7a738e20fb
